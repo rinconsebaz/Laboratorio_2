@@ -3,18 +3,17 @@
 // Función para cargar los empleados desde el backend y llenar el selector correspondiente
 function cargarEmpleados() {
     fetch('http://localhost:8000/api/empleados')
-        .then(response => response.json())
-        .then(data => {
-            const selectEmpleado = document.getElementById('idEmpleado');
-            selectEmpleado.innerHTML = ''; // Limpiar el selector antes de agregar las opciones
-            data.forEach(empleado => {
-                const option = document.createElement('option');
-                option.value = empleado.id;
-                option.textContent = empleado.nombre;
-                selectEmpleado.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error al cargar los empleados:', error));
+    .then(response => response.json())
+    .then(data => {
+        const selectEmpleado = document.getElementById('idEmpleado');
+        data.forEach(empleado => {
+            const option = document.createElement('option');
+            option.value = empleado.id;
+            option.textContent = empleado.nombre;
+            selectEmpleado.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Error al cargar los empleados:', error));
 }
 
 // Función para cargar los estados desde el backend y llenar el selector correspondiente
@@ -101,4 +100,3 @@ function crearTarea(event) {
 
 // Escuchar el evento submit del formulario y llamar a la función para crear la tarea
 document.getElementById('formulario-tarea').addEventListener('submit', crearTarea);
-
