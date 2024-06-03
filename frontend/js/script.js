@@ -1,111 +1,104 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // URL de la API
-    const apiUrl = 'http://localhost:8000/api';
+// JavaScript para cargar dinámicamente los empleados, estados y prioridades desde el backend
 
-    // Cargar empleados y prioridades al cargar la página
-    fetchEmployees();
-    fetchPriorities();
-
-    // Cargar tareas al cargar la página
-    fetchTasks();
-
-    // Crear tarea al enviar el formulario
-    document.getElementById('create-task-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        createTask();
-    });
-
-    // Filtrar tareas al enviar el formulario
-    document.getElementById('filter-task-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        fetchFilteredTasks();
-    });
-
-    function fetchEmployees() {
-        fetch(`${apiUrl}/empleados`)
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('idEmpleado');
-                select.innerHTML = '';
-                data.forEach(empleado => {
-                    const option = document.createElement('option');
-                    option.value = empleado.id;
-                    option.textContent = empleado.nombre;
-                    select.appendChild(option);
-                });
+// Función para cargar los empleados desde el backend y llenar el selector correspondiente
+function cargarEmpleados() {
+    fetch('http://localhost:8000/api/empleados')
+        .then(response => response.json())
+        .then(data => {
+            const selectEmpleado = document.getElementById('idEmpleado');
+            selectEmpleado.innerHTML = ''; // Limpiar el selector antes de agregar las opciones
+            data.forEach(empleado => {
+                const option = document.createElement('option');
+                option.value = empleado.id;
+                option.textContent = empleado.nombre;
+                selectEmpleado.appendChild(option);
             });
-    }
-
-    function fetchPriorities() {
-        fetch(`${apiUrl}/prioridades`)
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('idPrioridad');
-                const filterSelect = document.getElementById('filterPrioridad');
-                select.innerHTML = '';
-                filterSelect.innerHTML = '';
-                data.forEach(prioridad => {
-                    const option = document.createElement('option');
-                    option.value = prioridad.id;
-                    option.textContent = prioridad.nombre;
-                    select.appendChild(option);
-                    filterSelect.appendChild(option.cloneNode(true));
-                });
-            });
-    }
-
-    function fetchTasks() {
-        fetch(`${apiUrl}/tareas`)
-            .then(response => response.json())
-            .then(displayTasks);
-    }
-
-    function displayTasks(tasks) {
-        const taskList = document.getElementById('task-list');
-        taskList.innerHTML = '';
-        tasks.forEach(task => {
-            const taskDiv = document.createElement('div');
-            taskDiv.classList.add('task');
-            if (task.idEstado === 4) { // 4 es 'En impedimento'
-                taskDiv.classList.add('impedimento');
-            }
-            taskDiv.innerHTML = `
-                <h3>${task.titulo}</h3>
-                <p>${task.descripcion}</p>
-                <p>Responsable: ${task.empleado.nombre}</p>
-                <p>Prioridad: ${task.prioridad.nombre}</p>
-                <p>Estado: ${task.estado.nombre}</p>
-            `;
-            taskList.appendChild(taskDiv);
-        });
-    }
-
-    function createTask() {
-        const form = document.getElementById('create-task-form');
-        const formData = new FormData(form);
-        fetch(`${apiUrl}/tareas`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(Object.fromEntries(formData))
         })
-        .then(response => {
-            if (response.ok) {
-                fetchTasks();
-                form.reset();
-            } else {
-                alert('Error al crear la tarea');
-            }
-        });
-    }
+        .catch(error => console.error('Error al cargar los empleados:', error));
+}
 
-    function fetchFilteredTasks() {
-        const form = document.getElementById('filter-task-form');
-        const formData = new FormData(form);
-        const params = new URLSearchParams(Object.fromEntries(formData));
-        fetch(`${apiUrl}/tareas?${params.toString()}`)
-            .then(response => response.json())
-            .then(displayTasks);
-    }
-});
+// Función para cargar los estados desde el backend y llenar el selector correspondiente
+function cargarEstados() {
+    fetch('http://localhost:8000/api/estados')
+        .then(response => response.json())
+        .then(data => {
+            const selectEstado = document.getElementById('idEstado');
+            selectEstado.innerHTML = ''; // Limpiar el selector antes de agregar las opciones
+            data.forEach(estado => {
+                const option = document.createElement('option');
+                option.value = estado.id;
+                option.textContent = estado.nombre;
+                selectEstado.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al cargar los estados:', error));
+}
+
+// Función para cargar las prioridades desde el backend y llenar el selector correspondiente
+function cargarPrioridades() {
+    fetch('http://localhost:8000/api/prioridades')
+        .then(response => response.json())
+        .then(data => {
+            const selectPrioridad = document.getElementById('idPrioridad');
+            selectPrioridad.innerHTML = ''; // Limpiar el selector antes de agregar las opciones
+            data.forEach(prioridad => {
+                const option = document.createElement('option');
+                option.value = prioridad.id;
+                option.textContent = prioridad.nombre;
+                selectPrioridad.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al cargar las prioridades:', error));
+}
+
+// Llamar a las funciones para cargar los datos al cargar la página
+window.onload = function() {
+    cargarEmpleados();
+    cargarEstados();
+    cargarPrioridades();
+};
+
+// JavaScript para enviar datos del formulario al backend y crear una nueva tarea
+
+// Función para enviar los datos del formulario al backend
+function crearTarea(event) {
+    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    const formData = new FormData(document.getElementById('formulario-tarea'));
+    const tareaData = {
+        titulo: formData.get('titulo'),
+        descripcion: formData.get('descripcion'),
+        fechaEstimadaFinalizacion: formData.get('fechaEstimadaFinalizacion'),
+        creadorTarea: formData.get('creadorTarea'),
+        idEmpleado: formData.get('idEmpleado'),
+        idEstado: formData.get('idEstado'),
+        idPrioridad: formData.get('idPrioridad'),
+        observaciones: formData.get('observaciones')
+    };
+
+    fetch('http://localhost:8000/api/tareas', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tareaData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al crear la tarea.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Tarea creada exitosamente:', data);
+        // Aquí podrías redirigir al usuario a otra página o mostrar un mensaje de éxito
+    })
+    .catch(error => {
+        console.error('Error al crear la tarea:', error);
+        // Aquí podrías mostrar un mensaje de error al usuario
+    });
+}
+
+// Escuchar el evento submit del formulario y llamar a la función para crear la tarea
+document.getElementById('formulario-tarea').addEventListener('submit', crearTarea);
+

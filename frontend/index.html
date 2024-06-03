@@ -1,57 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Tareas</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Crear Tarea</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>Gestión de Tareas</h1>
-
-    <!-- Formulario para crear tarea -->
-    <form id="create-task-form">
+    <div class="container">
         <h2>Crear Tarea</h2>
-        <label for="titulo">Título:</label><br>
-        <input type="text" id="titulo" name="titulo" required><br>
-        <label for="descripcion">Descripción:</label><br>
-        <textarea id="descripcion" name="descripcion" required></textarea><br>
-        <label for="fechaEstimadaFinalizacion">Fecha Estimada de Finalización:</label><br>
-        <input type="date" id="fechaEstimadaFinalizacion" name="fechaEstimadaFinalizacion" required><br>
-        <label for="creadorTarea">Creador de la Tarea:</label><br>
-        <input type="text" id="creadorTarea" name="creadorTarea" required><br>
-        <label for="idEmpleado">Responsable:</label><br>
-        <select id="idEmpleado" name="idEmpleado" required>
-            <option value="">Seleccione un empleado</option>
-        </select><br>
-        <label for="idPrioridad">Prioridad:</label><br>
-        <select id="idPrioridad" name="idPrioridad" required>
-            <option value="">Seleccione una prioridad</option>
-        </select><br>
-        <button type="submit">Crear Tarea</button>
-    </form>
+        <form id="crearTareaForm">
+            <label for="titulo">Título:</label><br>
+            <input type="text" id="titulo" name="titulo" required><br>
 
-    <!-- Formulario para filtrar tareas -->
-    <form id="filter-task-form">
-        <h2>Filtrar Tareas</h2>
-        <label for="filterFechaInicio">Fecha Inicio:</label><br>
-        <input type="date" id="filterFechaInicio" name="filterFechaInicio"><br>
-        <label for="filterFechaFin">Fecha Fin:</label><br>
-        <input type="date" id="filterFechaFin" name="filterFechaFin"><br>
-        <label for="filterPrioridad">Prioridad:</label><br>
-        <select id="filterPrioridad" name="filterPrioridad">
-            <option value="">Seleccione una prioridad</option>
-        </select><br>
-        <label for="filterResponsable">Responsable:</label><br>
-        <select id="filterResponsable" name="filterResponsable">
-            <option value="">Seleccione un responsable</option>
-        </select><br>
-        <button type="submit">Filtrar</button>
-    </form>
+            <label for="descripcion">Descripción:</label><br>
+            <textarea id="descripcion" name="descripcion" required></textarea><br>
 
-    <!-- Lista de tareas -->
-    <div id="task-list"></div>
+            <label for="fechaEstimadaFinalizacion">Fecha Estimada de Finalización:</label><br>
+            <input type="date" id="fechaEstimadaFinalizacion" name="fechaEstimadaFinalizacion" required><br>
 
-    <script src="js/scripts.js"></script>
+            <label for="creadorTarea">Creador de la Tarea:</label><br>
+            <input type="text" id="creadorTarea" name="creadorTarea" required><br>
+
+            <label for="idEmpleado">Responsable de la Tarea:</label><br>
+            <select id="idEmpleado" name="idEmpleado" required>
+                <!-- Aquí se cargarán los empleados desde la base de datos -->
+            </select><br>
+
+            <label for="idEstado">Estado de la Tarea:</label><br>
+            <select id="idEstado" name="idEstado" required>
+                <!-- Aquí se cargarán los estados desde la base de datos -->
+            </select><br>
+
+            <label for="idPrioridad">Prioridad de la Tarea:</label><br>
+            <select id="idPrioridad" name="idPrioridad" required>
+                <!-- Aquí se cargarán las prioridades desde la base de datos -->
+            </select><br>
+
+            <label for="observaciones">Observaciones:</label><br>
+            <textarea id="observaciones" name="observaciones"></textarea><br>
+
+            <input type="submit" value="Crear Tarea">
+        </form>
+    </div>
+
+    <script src="scripts.js"></script>
 </body>
+
 </html>
+
